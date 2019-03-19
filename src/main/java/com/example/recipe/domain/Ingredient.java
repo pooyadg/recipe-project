@@ -20,6 +20,9 @@ public class Ingredient {
 
     private String description;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private UnitOfMeasure unitOfMeasure;
+
     private BigDecimal amount;
 
 
