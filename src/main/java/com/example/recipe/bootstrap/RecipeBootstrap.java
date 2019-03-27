@@ -4,15 +4,18 @@ package com.example.recipe.bootstrap;
 import com.example.recipe.domain.*;
 import com.example.recipe.repositories.CategoryRepository;
 import com.example.recipe.repositories.RecipeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -25,12 +28,15 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         recipeRepository.saveAll(getRecipes());
     }
 
 
     private Set<Recipe> getRecipes() {
+
+        log.debug("getRecipes called...");
 
         Set<Recipe> recipes = new HashSet<>();
 
