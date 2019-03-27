@@ -45,16 +45,18 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         ingredient.setAmount(BigDecimal.valueOf(2000000));
         ingredient.setDescription("Salt");
         ingredient.setRecipe(firstRecipe);
-        ingredients.add(ingredient);
+//        ingredients.add(ingredient);
+        firstRecipe.addIngredients(ingredient);
+
 
         ingredient = new Ingredient();
         ingredient.setAmount(BigDecimal.valueOf(34780000));
         ingredient.setDescription("Peper");
         ingredient.setRecipe(firstRecipe);
-        ingredients.add(ingredient);
+//        ingredients.add(ingredient);
+        firstRecipe.addIngredients(ingredient);
 
-
-        firstRecipe.setIngredients(ingredients);
+//        firstRecipe.setIngredients(ingredients);
 
         Notes notes = new Notes();
         notes.setNotes("This is a simple note for the first recipe.");
