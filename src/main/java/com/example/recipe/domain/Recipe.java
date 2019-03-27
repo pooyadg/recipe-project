@@ -2,6 +2,7 @@ package com.example.recipe.domain;
 
 import javax.persistence.*;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -15,6 +16,8 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "recipe_id")
     private Long id;
+
+    @Lob
     private String description;
     private Integer prepTime;
     private Integer cookTime;
@@ -139,23 +142,26 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
+    public Set<Category> getCategories() {
+        return this.categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Recipe recipe = (Recipe) o;
-
-        if (!id.equals(recipe.id)) return false;
-        return description.equals(recipe.description);
-
+        return Objects.equals(this.id, recipe.id) &&
+                Objects.equals(this.description, recipe.description);
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + description.hashCode();
-        return result;
+        return Objects.hash(this.id, this.description);
     }
 
     @Override

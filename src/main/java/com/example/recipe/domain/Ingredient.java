@@ -2,6 +2,7 @@ package com.example.recipe.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -62,19 +63,14 @@ public class Ingredient {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Ingredient that = (Ingredient) o;
-
-        if (!id.equals(that.id)) return false;
-        return description.equals(that.description);
-
+        return Objects.equals(this.id, that.id) &&
+                Objects.equals(this.description, that.description);
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + description.hashCode();
-        return result;
+        return Objects.hash(this.id, this.description);
     }
 
     @Override
