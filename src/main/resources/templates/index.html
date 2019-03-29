@@ -22,58 +22,46 @@
 </head>
 <body>
 
-<h1> Hello world.!!!</h1>
-
 <div class="container-fluid">
-
     <div class="row">
-
         <div class="col-md-6 col-md-offset-3">
-
             <div class="panel panel-primary">
-
                 <div class="panel-heading">
                     <div class="panel-title"> Test</div>
                 </div>
                 <div class="panel-body">
-
                     <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
                         <table class="table table-hover">
                             <thead class="thead-inverse">
                             <tr>
                                 <th>Id</th>
                                 <th>Description</th>
+                                <th>Details</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:remove="all">
                                 <td th:text="${recipe.id}"> 123</td>
                                 <td th:text="${recipe.description}">item 1</td>
+                                <td th:text="${recipe.details}"><a>view details</a></td>
                             </tr>
                             <tr th:remove="all">
                                 <td th:text="${recipe.id}"> 1234</td>
                                 <td th:text="${recipe.description}">item 2</td>
+                                <td th:text="${recipe.details}"><a>view details</a></td>
                             </tr>
                             <tr th:each="recipe : ${recipes}">
                                 <td th:text="${recipe.id}"></td>
                                 <td th:text="${recipe.description}"></td>
+                                <td><a href="#" th:href="'/recipe/details/'+${recipe.id}">view details</a></td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
-
                 </div>
-
-
             </div>
-
-
         </div>
-
     </div>
-
-
 </div>
-
 </body>
 </html>

@@ -18,13 +18,14 @@ public class Recipe {
     @Column(name = "recipe_id")
     private Long id;
 
-    @Lob
     private String description;
     private Integer prepTime;
     private Integer cookTime;
     private Integer servings;
     private String source;
     private String url;
+
+    @Lob
     private String directions;
 
     @Enumerated(value = EnumType.STRING)
@@ -45,7 +46,7 @@ public class Recipe {
             joinColumns =
             @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
 
 
     public void setNotes(Notes notes) {
@@ -53,8 +54,9 @@ public class Recipe {
         this.notes = notes;
     }
 
-    public void addIngredients(Ingredient ingredient) {
+    public Recipe addIngredient(Ingredient ingredient){
         ingredient.setRecipe(this);
         this.ingredients.add(ingredient);
+        return this;
     }
 }
