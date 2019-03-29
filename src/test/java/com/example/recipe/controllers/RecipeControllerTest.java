@@ -42,12 +42,20 @@ public class RecipeControllerTest {
     @Test
     public void testGetRecipeDetailsById() throws Exception {
 
+        //given
         Long sampleId = 1L;
+        Recipe recipe = new Recipe();
+        recipe.setId(sampleId);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeDetailsController).build();
 
+        Mockito.when(recipeService.getRecipeById(Mockito.anyLong())).thenReturn(recipe);
+
+        //when
         String detailsView = recipeDetailsController.getRecipeDetailsById(sampleId.toString(), model);
 
+
+        //then
         String expectedViewName = "/recipe/details";
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/recipe/details/" + sampleId.toString()))
