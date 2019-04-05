@@ -1,9 +1,7 @@
 package com.example.recipe.controllers;
 
 import com.example.recipe.domain.Recipe;
-import com.example.recipe.repositories.RecipeRepository;
 import com.example.recipe.services.RecipeService;
-import com.example.recipe.services.RecipeServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,13 +9,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
-
-import java.util.Optional;
 
 /**
  * Created by pooya on 3/29/2019.
@@ -25,7 +20,7 @@ import java.util.Optional;
 public class RecipeControllerTest {
 
 
-    private RecipeDetailsController recipeDetailsController;
+    private RecipeController recipeDetailsController;
 
     @Mock
     RecipeService recipeService;
@@ -36,7 +31,7 @@ public class RecipeControllerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        recipeDetailsController = new RecipeDetailsController(recipeService);
+        recipeDetailsController = new RecipeController(recipeService);
     }
 
     @Test
