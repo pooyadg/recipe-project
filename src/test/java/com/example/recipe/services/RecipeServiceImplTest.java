@@ -40,7 +40,7 @@ public class RecipeServiceImplTest {
         Optional<Recipe> recipeOptional = Optional.of(sampleRecipe);
         Mockito.when(recipeRepository.findById(sampleId)).thenReturn(recipeOptional);
 
-        Recipe recipe = recipeService.getRecipeById(sampleId);
+        Recipe recipe = recipeService.findRecipeById(sampleId);
 
         assertNotNull(recipe);
         assertEquals(sampleId, recipe.getId());
