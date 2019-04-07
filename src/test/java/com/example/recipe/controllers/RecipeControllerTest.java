@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
 /**
  * Created by pooya on 3/29/2019.
  */
@@ -31,6 +33,7 @@ public class RecipeControllerTest {
 
     @Mock
     Model model;
+    public static final Long SAMPLE_ID = 1L;
 
     @Before
     public void setUp() throws Exception {
@@ -43,20 +46,19 @@ public class RecipeControllerTest {
     public void testGetRecipeDetailsById() throws Exception {
 
         //given
-        Long sampleId = 1L;
+        Long SAMPLE_ID = 1L;
         Recipe recipe = new Recipe();
-        recipe.setId(sampleId);
+        recipe.setId(SAMPLE_ID);
 
         Mockito.when(recipeService.findRecipeById(Mockito.anyLong())).thenReturn(recipe);
 
         //when
-        String detailsView = recipeDetailsController.getRecipeDetailsById(sampleId.toString(), model);
+        String detailsView = recipeDetailsController.getRecipeDetailsById(SAMPLE_ID.toString(), model);
 
 
         //then
         String expectedViewName = "/recipe/details";
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/recipe/" + sampleId.toString() + "/details/"))
+        mockMvc.perform(get("/recipe/" + SAMPLE_ID.toString() + "/details/"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name(expectedViewName))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
@@ -70,8 +72,7 @@ public class RecipeControllerTest {
     @Test
     public void testGetNewRecipeForm() throws Exception {
         //when then
-        mockMvc.perform(MockMvcRequestBuilders.
-                get("/recipe/new"))
+        mockMvc.perform(get("/recipe/new"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("/recipe/recipeform"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
@@ -81,9 +82,9 @@ public class RecipeControllerTest {
     public void testPostRecipeForm() throws Exception {
 
         //given
-        Long sampleId = 1L;
+        Long SAMPLE_ID = 1L;
         RecipeCommand expectedReturn = new RecipeCommand();
-        expectedReturn.setId(sampleId);
+        expectedReturn.setId(SAMPLE_ID);
 
         Mockito.when(recipeService.saveCommand(Mockito.any())).thenReturn(expectedReturn);
 
@@ -93,26 +94,38 @@ public class RecipeControllerTest {
                 .param("id", "")
                 .param("description", "Some strings"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.view().name("redirect:/recipe/" + sampleId.toString() + "/details"));
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/recipe/" + SAMPLE_ID.toString() + "/details"));
     }
 
     @Test
     public void testGetUpdateView() throws Exception {
         //given
-        Long sampleId = 1L;
         Recipe recipe = new Recipe();
-        recipe.setId(sampleId);
+        recipe.setId(SAMPLE_ID);
 
         RecipeCommand expectedCommand = new RecipeCommand();
-        expectedCommand.setId(sampleId);
+        expectedCommand.setId(SAMPLE_ID);
 
         Mockito.when(recipeService.findRecipeCommandById(Mockito.any())).thenReturn(expectedCommand);
 
         //when then
-        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + sampleId.toString() + "/update"))
+        mockMvc.perform(get("/recipe/" + SAMPLE_ID.toString() + "/update"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("/recipe/recipeform"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
+
+    }
+
+    @Test
+    public void testDeleteRecipe() throws Exception {
+        //given
+
+
+        //when //then
+        mockMvc.perform(get("/recipe/" + SAMPLE_ID + "/delete"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/"));
+
 
     }
 }
