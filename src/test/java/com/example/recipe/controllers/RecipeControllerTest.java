@@ -16,7 +16,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 /**
  * Created by pooya on 3/29/2019.
@@ -50,7 +53,7 @@ public class RecipeControllerTest {
         Recipe recipe = new Recipe();
         recipe.setId(SAMPLE_ID);
 
-        Mockito.when(recipeService.findRecipeById(Mockito.anyLong())).thenReturn(recipe);
+        Mockito.when(recipeService.findById(anyLong())).thenReturn(recipe);
 
         //when
         String detailsView = recipeDetailsController.getRecipeDetailsById(SAMPLE_ID.toString(), model);
@@ -64,7 +67,7 @@ public class RecipeControllerTest {
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
 
 
-        Mockito.verify(model, Mockito.times(1)).addAttribute(Mockito.eq("recipe"), Mockito.any());
+        verify(model, times(1)).addAttribute(Mockito.eq("recipe"), Mockito.any());
         Assert.assertEquals(expectedViewName, detailsView);
 
     }
@@ -106,7 +109,7 @@ public class RecipeControllerTest {
         RecipeCommand expectedCommand = new RecipeCommand();
         expectedCommand.setId(SAMPLE_ID);
 
-        Mockito.when(recipeService.findRecipeCommandById(Mockito.any())).thenReturn(expectedCommand);
+        Mockito.when(recipeService.findCommandById(Mockito.any())).thenReturn(expectedCommand);
 
         //when then
         mockMvc.perform(get("/recipe/" + SAMPLE_ID.toString() + "/update"))
@@ -120,12 +123,12 @@ public class RecipeControllerTest {
     public void testDeleteRecipe() throws Exception {
         //given
 
-
         //when //then
         mockMvc.perform(get("/recipe/" + SAMPLE_ID + "/delete"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/"));
 
+        verify(recipeService, times(1)).deleteById(anyLong());
 
     }
 }

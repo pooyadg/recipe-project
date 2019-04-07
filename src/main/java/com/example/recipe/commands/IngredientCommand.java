@@ -10,6 +10,8 @@ public class IngredientCommand {
 
     private Long id;
 
+    private Long recipeId;
+
     private String description;
 
     private UnitOfMeasureCommand unitOfMeasure;
