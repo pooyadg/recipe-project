@@ -71,7 +71,10 @@ public class IngredientServiceImpl implements IngredientService {
             Optional<Ingredient> ingredientOptional = recipe
                     .getIngredients()
                     .stream()
-                    .filter(ingredient -> ingredient.getId().equals(command.getId()))
+                    .filter(ingredient -> {
+                        Long id = ingredient.getId();
+                        return id.equals(command.getId());
+                    })
                     .findFirst();
 
             if (ingredientOptional.isPresent()) {
