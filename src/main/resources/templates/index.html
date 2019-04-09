@@ -21,22 +21,23 @@
 
 </head>
 <body>
-
-<div class="container-fluid">
+<!--/*@thymesVar id="recipes" type="java.util.List"*/-->
+<!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
+<div class="container-fluid" style="margin-top: 20px">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <div class="panel-title"> Test</div>
+                    <h1 class="panel-title">My Recipes!</h1>
                 </div>
                 <div class="panel-body">
                     <div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
                         <table class="table table-hover">
                             <thead class="thead-inverse">
                             <tr>
-                                <th>Id</th>
+                                <th>ID</th>
                                 <th>Description</th>
-                                <th>View details</th>
+                                <th>View</th>
                                 <th>Update</th>
                                 <th>Delete</th>
                             </tr>

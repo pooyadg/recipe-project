@@ -1,78 +1,110 @@
 package com.example.recipe.services;
 
+import com.example.recipe.commands.RecipeCommand;
+import com.example.recipe.converters.RecipeCommandToRecipe;
+import com.example.recipe.converters.RecipeToRecipeCommand;
 import com.example.recipe.domain.Recipe;
 import com.example.recipe.repositories.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by pooya on 3/28/2019.
  */
 public class RecipeServiceImplTest {
 
-    private RecipeService recipeService;
+    RecipeService recipeService;
 
     @Mock
-    private RecipeRepository recipeRepository;
+    RecipeRepository recipeRepository;
+
+    @Mock
+    RecipeToRecipeCommand recipeToRecipeCommand;
+
+    @Mock
+    RecipeCommandToRecipe recipeCommandToRecipe;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        recipeService = new RecipeServiceImpl(recipeRepository, null, null);
+
+        recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
     }
 
     @Test
-    public void testGetRecipeById() throws Exception {
-
-        Long sampleId = 1L;
-
-        Recipe sampleRecipe = new Recipe();
-        sampleRecipe.setId(sampleId);
-        Optional<Recipe> recipeOptional = Optional.of(sampleRecipe);
-        Mockito.when(recipeRepository.findById(sampleId)).thenReturn(recipeOptional);
-
-        Recipe recipe = recipeService.findRecipeById(sampleId);
-
-        assertNotNull(recipe);
-        assertEquals(sampleId, recipe.getId());
-
-    }
-
-    @Test
-    public void getRecipes() throws Exception {
+    public void getRecipeByIdTest() throws Exception {
         Recipe recipe = new Recipe();
-        Set<Recipe> recipeSet = new HashSet<>();
-        recipeSet.add(recipe);
+        recipe.setId(1L);
+        Optional<Recipe> recipeOptional = Optional.of(recipe);
 
-        Mockito.when(recipeService.getRecipes()).thenReturn(recipeSet);
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+
+        Recipe recipeReturned = recipeService.findById(1L);
+
+        assertNotNull("Null recipe returned", recipeReturned);
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, never()).findAll();
+    }
+
+    @Test
+    public void getRecipeCommandByIdTest() throws Exception {
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        Optional<Recipe> recipeOptional = Optional.of(recipe);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(1L);
+
+        when(recipeToRecipeCommand.convert(any())).thenReturn(recipeCommand);
+
+        RecipeCommand commandById = recipeService.findCommandById(1L);
+
+        assertNotNull("Null recipe returned", commandById);
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, never()).findAll();
+    }
+
+    @Test
+    public void getRecipesTest() throws Exception {
+
+        Recipe recipe = new Recipe();
+        HashSet receipesData = new HashSet();
+        receipesData.add(recipe);
+
+        when(recipeService.getRecipes()).thenReturn(receipesData);
 
         Set<Recipe> recipes = recipeService.getRecipes();
-        assertEquals(1, recipes.size());
 
-        Mockito.verify(recipeRepository, Mockito.times(1)).findAll();
-
+        assertEquals(recipes.size(), 1);
+        verify(recipeRepository, times(1)).findAll();
+        verify(recipeRepository, never()).findById(anyLong());
     }
 
     @Test
-    public void testDeleteRecipeById() {
+    public void testDeleteById() throws Exception {
 
         //given
-        Long sampleId = 1L;
+        Long idToDelete = Long.valueOf(2L);
 
         //when
-        recipeService.deleteById(sampleId);
+        recipeService.deleteById(idToDelete);
+
+        //no 'when', since method has void return type
 
         //then
-        Mockito.verify(recipeRepository, Mockito.times(1)).deleteById(Mockito.anyLong());
-
+        verify(recipeRepository, times(1)).deleteById(anyLong());
     }
 }
