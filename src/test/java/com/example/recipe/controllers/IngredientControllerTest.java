@@ -53,7 +53,7 @@ public class IngredientControllerTest {
         //when
         mockMvc.perform(get("/recipe/1/ingredients"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("recipe/ingredient/list"))
+                .andExpect(view().name("recipe/ingredients/list"))
                 .andExpect(model().attributeExists("recipe"));
 
         //then
@@ -108,7 +108,7 @@ public class IngredientControllerTest {
         //then
         mockMvc.perform(get("/recipe/1/ingredients/2/update"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("recipe/ingredient/ingredientform"))
+                .andExpect(view().name("recipe/ingredients/ingredientform"))
                 .andExpect(model().attributeExists("ingredient"))
                 .andExpect(model().attributeExists("uomList"));
     }
