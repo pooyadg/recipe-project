@@ -1,22 +1,26 @@
 package com.example.recipe.controllers;
 
 import com.example.recipe.services.ImageService;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ImageControllerTest {
 
@@ -45,7 +49,7 @@ public class ImageControllerTest {
 
         //when then
         mockMvc.perform(get("/recipe/" + SAMPLE_ID + "/image"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipeId"))
                 .andExpect(MockMvcResultMatchers.view().name("/recipe/imageform"));
 
@@ -54,7 +58,7 @@ public class ImageControllerTest {
     @Test
     public void testHandleImagePost() throws Exception {
         //given
-        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+        MultipartFile mockMultipartFile = new MockMultipartFile(
                 "imageFile",
                 "test.text",
                 "text/plain",
@@ -62,12 +66,33 @@ public class ImageControllerTest {
 
         //when //then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/recipe/" + SAMPLE_ID + "/image")
-                .file(mockMultipartFile))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .file((MockMultipartFile) mockMultipartFile))
+                .andExpect(status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.header().string("Location", "/recipe/" + SAMPLE_ID + "/details"))
         ;
 
         Mockito.verify(imageService, Mockito.times(1)).saveImageFile(anyLong(), any());
+
+    }
+
+    @Test
+    public void testRenderImageFromDb() throws Exception {
+        //given
+        MultipartFile mockMultipartFile = new MockMultipartFile(
+                "imageFile",
+                "test.text",
+                "text/plain",
+                "This is a sample content".getBytes());
+
+        //when
+        MvcResult mvcResult = mockMvc.perform(get("/recipe/" + SAMPLE_ID + "/recipe-image"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        MockHttpServletResponse response = mvcResult.getResponse();
+
+        //then
+        Assert.assertEquals(mockMultipartFile.getBytes().length, response.getContentAsByteArray().length);
 
 
     }
