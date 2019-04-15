@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:width="http://www.w3.org/1999/xhtml"
+      xmlns:height="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -36,7 +37,7 @@
                             <div class="col-md-3">
                                 <h5>Categories:</h5>
                             </div>
-                            <div class="col-md-9">
+                            <div class="col-md-3">
                                 <ul>
                                     <li th:remove="all">cat one</li>
                                     <li th:remove="all">cat two</li>
@@ -44,6 +45,12 @@
                                         th:text="${category.name}">cat three
                                     </li>
                                 </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <img src="../../static/images/Koala.jpg"
+                                     th:src="@{'/recipe/' + ${recipe.id} + '/recipe-image'}" width="200" height="200">
+                                <a class="btn btn-default" th:href="@{'/recipe/' + ${recipe.id} + '/image'}" role="button">update
+                                    image</a>
                             </div>
                         </div>
                         <div class="row">
@@ -94,10 +101,11 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-md-11 ">
-                        <h1 class="panel-title">Ingredients</h1>
-                    </div>
+                                <h1 class="panel-title">Ingredients</h1>
+                            </div>
                             <div class="col-md-1">
-                                <a class="btn btn-default" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}" role="button">View</a>
+                                <a class="btn btn-default" href="#"
+                                   th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}" role="button">View</a>
                             </div>
                         </div>
                     </div>
