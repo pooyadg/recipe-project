@@ -48,7 +48,7 @@
                             </div>
                             <div class="col-md-6">
                                 <img src="../../static/images/Koala.jpg"
-                                     th:src="@{/images/Penguins.jpg}" width="200" height="200">
+                                     th:src="@{'/recipe/' + ${recipe.id} + '/recipe-image'}" width="200" height="200">
                                 <a class="btn btn-default" th:href="@{'/recipe/' + ${recipe.id} + '/image'}" role="button">update
                                     image</a>
                             </div>

@@ -56,16 +56,12 @@ public class ImageController {
 
         Byte[] imageBytes = recipeCommand.getImage();
         byte[] bytes = new byte[imageBytes.length];
-        for (int i=0 ; i)
-
-
+        for (int i = 0; i < imageBytes.length; i++) {
+            bytes[i] = imageBytes[i];
+        }
         response.setContentType("image/jpeg");
-
-        InputStream inputStream = new ByteArrayInputStream()
-
-        IOUtils.copy( ,response.getOutputStream());
-
-
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+        IOUtils.copy(inputStream, response.getOutputStream());
 
 
     }

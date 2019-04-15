@@ -1,6 +1,8 @@
 package com.example.recipe.controllers;
 
+import com.example.recipe.commands.RecipeCommand;
 import com.example.recipe.services.ImageService;
+import com.example.recipe.services.RecipeService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +34,9 @@ public class ImageControllerTest {
     @Mock
     private ImageService imageService;
 
+    @Mock
+    private RecipeService recipeService;
+
     private MockMvc mockMvc;
     public static final Long SAMPLE_ID = 1L;
 
@@ -39,7 +44,7 @@ public class ImageControllerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        imageController = new ImageController(imageService);
+        imageController = new ImageController(imageService, recipeService);
         mockMvc = MockMvcBuilders.standaloneSetup(imageController).build();
     }
 
@@ -84,6 +89,20 @@ public class ImageControllerTest {
                 "text/plain",
                 "This is a sample content".getBytes());
 
+        byte[] multipartFileBytes = mockMultipartFile.getBytes();
+        int length = multipartFileBytes.length;
+        Byte[] bytes = new Byte[length];
+
+        for (int i = 0; i < length; i++) {
+            bytes[i] = multipartFileBytes[i];
+        }
+
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(SAMPLE_ID);
+        recipeCommand.setImage(bytes);
+
+        Mockito.when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+
         //when
         MvcResult mvcResult = mockMvc.perform(get("/recipe/" + SAMPLE_ID + "/recipe-image"))
                 .andExpect(status().isOk())
@@ -92,7 +111,7 @@ public class ImageControllerTest {
         MockHttpServletResponse response = mvcResult.getResponse();
 
         //then
-        Assert.assertEquals(mockMultipartFile.getBytes().length, response.getContentAsByteArray().length);
+        Assert.assertEquals(multipartFileBytes.length, response.getContentAsByteArray().length);
 
 
     }
