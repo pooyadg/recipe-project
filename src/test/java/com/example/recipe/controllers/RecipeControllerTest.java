@@ -50,10 +50,10 @@ public class RecipeControllerTest {
 
         //given
         Long SAMPLE_ID = 1L;
-        Recipe recipe = new Recipe();
-        recipe.setId(SAMPLE_ID);
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(SAMPLE_ID);
 
-        Mockito.when(recipeService.findById(anyLong())).thenReturn(recipe);
+        Mockito.when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
 
         //when
         String detailsView = recipeDetailsController.getRecipeDetailsById(SAMPLE_ID.toString(), model);
